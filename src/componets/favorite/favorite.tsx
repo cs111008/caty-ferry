@@ -1,13 +1,14 @@
 import ToggleButton from '@mui/material/ToggleButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { ICatInterface } from '../../interfaces/cat.interface';
 
-const Favorite = (props:{ selected: boolean, setSelected: Function }) => {
+const Favorite = (props: { onFavorite: Function, cat: ICatInterface }) => {
   return (
     <ToggleButton
       value="favorite"
-      selected={props.selected}
+      selected={props.cat.isFavourite || false}
       onChange={() => {
-        props.setSelected(!props.selected);
+        props.onFavorite(props.cat);
       }}
       color='primary'
       size='small'

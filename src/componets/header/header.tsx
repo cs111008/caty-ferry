@@ -18,10 +18,10 @@ const Header = () => {
             Catty Ferry
           </Typography>
         </NavLink>
+        <Button variant="outlined" sx={{ color: '#FFF', ml: 'auto' }}>
+          <NavLink className='nav-link' to="/upload">Add new cat</NavLink>
+        </Button>
       </Toolbar>
-      <Button variant="outlined" sx={{ color: '#FFF' }} size="small">
-        <NavLink className='nav-link' to="/upload">Add new cat</NavLink>
-      </Button>
     </AppBar>
   );
 }

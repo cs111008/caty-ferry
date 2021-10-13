@@ -1,23 +1,22 @@
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Container from '@mui/material/Container';
 import PetsIcon from '@mui/icons-material/Pets';
-
-import Grid from '@mui/material/Grid';
 
 const Footer = () => {
   return (
-    <Box sx={{ bgcolor: 'background.paper', p: 6, borderTop: '2px solid red' }} component="footer">
-      <Grid container spacing={1}>
-        <Grid item md={5} sx={{ borderTop: '2px solid red' }} ></Grid>
-        <Grid item md={2} sx={{pl: '3%'}} >
-          <PetsIcon />
-        </Grid>
-        <Grid item md={5} sx={{ borderTop: '2px solid red' }}></Grid>
-      </Grid>
-      <Typography variant="h6" align="center" gutterBottom>
-        Cat API demo app
-      </Typography>
+    <Box sx={{ bgcolor: 'background.paper' }} component="footer">
+      <AppBar position="static" color="primary">
+        <Container maxWidth="md">
+          <Toolbar>
+            <Typography variant="body1" color="inherit">
+              <><PetsIcon /> Demo Cat App</>
+            </Typography>
+          </Toolbar>
+        </Container>
+      </AppBar>
     </Box>
   );
 }
