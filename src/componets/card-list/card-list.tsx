@@ -1,12 +1,13 @@
 import Grid from '@mui/material/Grid';
+import useCatActions from '../../hooks/use-cat-actions.hook';
 import { CardItem } from '../index';
-import { ICatInterface } from '../../interfaces/cat.interface';
 
-const CardList = (props: { cards: ICatInterface[], onFavorite: Function, onVote: Function }) => {
+const CardList = () => {
+  const { cats } = useCatActions();
   return (
     <Grid container spacing={4}>
-      {props.cards.map((cat) => (
-        <CardItem cat={cat} key={cat.id} onFavorite={props.onFavorite} onVote={props.onVote} />
+      {cats.map((cat) => (
+        <CardItem cat={cat} key={cat.id} />
       ))}
     </Grid>
   );

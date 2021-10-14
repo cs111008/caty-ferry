@@ -6,6 +6,17 @@ import { ICatInterface } from '../interfaces/cat.interface';
 import { IFavoriteInterface } from '../interfaces/favorite.interface';
 import { IVoteInterface } from '../interfaces/vote.interface';
 
+type RequestOptions = [
+    string, 
+    {
+        method: HTTP_METHODS;
+        headers: any;
+        body?: any;
+    }
+]
+
+const fetchRequest = (request: RequestOptions) => fetch(...request)
+
 const mergeFavoritesAndVotes = (catData: ICatInterface[], favorites: IFavoriteInterface[], votes: IVoteInterface[]): ICatInterface[] => {
     const cats = [...catData];
     const getTotalVoteCount = (catId: string): number => {
@@ -96,7 +107,9 @@ const getCatList = async () => {
 
 
 
+
 const CatService = {
+    fetchRequest,
     mergeFavoritesAndVotes,
     getCatList,
     getFavorites,

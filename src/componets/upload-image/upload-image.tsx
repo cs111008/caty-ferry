@@ -66,7 +66,7 @@ const renderSelectedFile = (file: any, uploading: boolean, handleUpload: React.M
           variant="outlined"
           sx={{ ml: 'auto' }}
         >
-          Upload
+          {uploading ? 'Uploading' : 'Upload'}
         </LoadingButton>
       </CardActions>
     </Card>

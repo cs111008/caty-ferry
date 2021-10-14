@@ -1,5 +1,6 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { useState, ReactElement } from 'react';
+import { useSnackbar } from 'notistack';
+import { Redirect } from 'react-router';
 import Grid from '@mui/material/Grid';
 import { UploadImage } from '../componets/index';
 import { createRequestOptions } from '../factories/fetch.factories';
@@ -7,8 +8,10 @@ import { HTTP_METHODS } from '../enums/http-methods.enum'
 import API_ENDPOINT_CONSTANTS from '../constants/api-endpoint.constants';
 
 const Upload = () => {
+    const { enqueueSnackbar } = useSnackbar();
     const [file, setFile] = useState();
     const [uploading, setUploading] = useState(false);
+    const [redirectRoute, setRedirectRoute] = useState<null | ReactElement>(null);
 
     const uploadImage = (event: any) => {
         setFile(event.target.files[0]);
@@ -29,15 +32,18 @@ const Upload = () => {
             const catUploadResult = await fetch(...uploadImageFetchRequestArgs);
             const catUploadJson: any = await catUploadResult.json();
             if (!catUploadResult.ok) {
-                console.error(`There is an error occurred while uploading the image. Please try again. ${catUploadJson.message}`);
-
+                setUploading(false);
+                setFile(undefined);
+                enqueueSnackbar(`Cat upload failed : ${catUploadJson.message}`, {variant: 'error'});
             } else {
                 setUploading(false);
                 setFile(undefined);
+                enqueueSnackbar('Cat added successfully', {variant: 'success'});
+                setRedirectRoute(<Redirect to="/" />);
+                
             }
-        } catch (err) {
-            console.error(`There is an error occurred while uploading the image. Please try again. ${err || ''}`);
-
+        } catch (err: any) {
+            enqueueSnackbar(`Cat upload unsuccessful : ${err.message}`, {variant: 'error'});
         }
     };
 
@@ -52,6 +58,7 @@ const Upload = () => {
             <Grid item xs={8} >
                 <UploadImage uploading={uploading} selectFile={(event: any) => uploadImage(event)} file={file} handleUpload={handleUpload} />
             </Grid>
+            {redirectRoute}
         </Grid>
     );
 }
