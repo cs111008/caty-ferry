@@ -13,10 +13,10 @@ const useCatContextValue = (): ICatContextData => {
   const [cats, setCats] = useState<ICatInterface[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchCats = useCallback(async () => {
+  const fetchCats = useCallback(async (showLoader = false) => {
 
     try {
-      setIsLoading(true);
+      setIsLoading(showLoader);
       const getCatListRequestArgs = createRequestOptions(
         HTTP_METHODS.GET,
         `${API_ENDPOINT_CONSTANTS.DOMAIN}${API_ENDPOINT_CONSTANTS.CAT_LIST}?limit=100`,

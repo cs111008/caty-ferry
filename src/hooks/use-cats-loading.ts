@@ -5,7 +5,7 @@ const useCatsLoading = () => {
     const { fetchCats } = useCatContext();
 
     useEffect(() => {
-        fetchCats();
+        fetchCats(true);
     }, [fetchCats])
 }
 
