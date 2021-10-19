@@ -21,20 +21,20 @@ const Upload = () => {
         const formData = new FormData();
         formData.append('file', file!);
 
-        const uploadImageFetchRequestArgs = createRequestOptions(
-            HTTP_METHODS.POST,
+        const uploadCatImageRequestOptions = createRequestOptions(
             `https://api.thecatapi.com${API_ENDPOINT_CONSTANTS.UPLOAD}`,
+            HTTP_METHODS.POST,
             {},
             formData
         );
 
         try {
-            const catUploadResult = await fetch(...uploadImageFetchRequestArgs);
-            const catUploadJson: any = await catUploadResult.json();
-            if (!catUploadResult.ok) {
+            const uploadCatResponse = await fetch(...uploadCatImageRequestOptions);
+            const uploadCatData: any = await uploadCatResponse.json();
+            if (!uploadCatResponse.ok) {
                 setUploading(false);
                 setFile(undefined);
-                enqueueSnackbar(`Cat upload failed : ${catUploadJson.message}`, {variant: 'error'});
+                enqueueSnackbar(`Cat upload failed : ${uploadCatData.message}`, {variant: 'error'});
             } else {
                 setUploading(false);
                 setFile(undefined);
@@ -42,8 +42,8 @@ const Upload = () => {
                 setRedirectRoute(<Redirect to="/" />);
                 
             }
-        } catch (err: any) {
-            enqueueSnackbar(`Cat upload unsuccessful : ${err.message}`, {variant: 'error'});
+        } catch (error: any) {
+            enqueueSnackbar(`Cat upload unsuccessful : ${error.message}`, {variant: 'error'});
         }
     };
 

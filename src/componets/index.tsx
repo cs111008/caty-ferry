@@ -5,3 +5,5 @@ export { default as CardList } from './card-list/card-list';
 export { default as Favorite } from './favorite/favorite';
 export { default as Vote } from './vote/vote';
 export { default as UploadImage } from './upload-image/upload-image';
+export { default as NoCatFound } from './no-cat-found/no-cat-found';
+export { default as Loader } from './loader/loader';

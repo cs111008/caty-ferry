@@ -17,20 +17,20 @@ const useCatContextValue = (): ICatContextData => {
 
     try {
       setIsLoading(showLoader);
-      const getCatListRequestArgs = createRequestOptions(
-        HTTP_METHODS.GET,
+      const getCatListRequestOptions = createRequestOptions(
         `${API_ENDPOINT_CONSTANTS.DOMAIN}${API_ENDPOINT_CONSTANTS.CAT_LIST}?limit=100`,
+        HTTP_METHODS.GET,
         { "content-type": 'application/json' }
       );
-      const catListResult = await fetch(...getCatListRequestArgs);
-      const catListJson: any = await catListResult.json();
-      if (catListResult.ok) {
+      const catListResponse = await fetch(...getCatListRequestOptions);
+      const catListData: any = await catListResponse.json();
+      if (catListResponse.ok) {
         const favorites = await CatService.getFavorites();
         const votes = await CatService.getVotes();
-        const catsWithFavAndVotes = CatService.mergeFavoritesAndVotes(catListJson, favorites, votes);
+        const catsWithFavAndVotes = CatService.mergeFavoritesAndVotes(catListData, favorites, votes);
         setCats(catsWithFavAndVotes);
       } else {
-        enqueueSnackbar(`${NOTIFICATION_MESSAGES.CAT_FETCH_FAILED}: ${catListJson.message}`, { variant: 'error' });
+        enqueueSnackbar(`${NOTIFICATION_MESSAGES.CAT_FETCH_FAILED}: ${catListData.message}`, { variant: 'error' });
       }
       setIsLoading(false);
     } catch (e: any) {
@@ -50,33 +50,33 @@ const useCatContextValue = (): ICatContextData => {
     };
     const messageText = selectedCat.isFavourite ? 'unfavorite' : 'favorite';
     try {
-      let setCatFavoriteReq;
+      let setFavoriteCatRequestOptions;
 
       if (selectedCat.isFavourite) {
-        setCatFavoriteReq = createRequestOptions(
-          HTTP_METHODS.DELETE,
+        setFavoriteCatRequestOptions = createRequestOptions(
           `${API_ENDPOINT_CONSTANTS.DOMAIN}${API_ENDPOINT_CONSTANTS.CAT_FAVOURITES}/${selectedCat.favoriteId}`,
+          HTTP_METHODS.DELETE,
           { "content-type": 'application/json' }
         );
       } else {
-        setCatFavoriteReq = createRequestOptions(
-          HTTP_METHODS.POST,
+        setFavoriteCatRequestOptions = createRequestOptions(
           `${API_ENDPOINT_CONSTANTS.DOMAIN}${API_ENDPOINT_CONSTANTS.CAT_FAVOURITES}`,
+          HTTP_METHODS.POST,
           { "content-type": 'application/json' },
           JSON.stringify(favoritePayload)
         );
       }
 
-      const catFavoriteResult = await fetch(...setCatFavoriteReq);
-      const catVoteFavoriteJson: any = await catFavoriteResult.json();
-      if (catFavoriteResult.ok) {
+      const favoriteCatResponse = await fetch(...setFavoriteCatRequestOptions);
+      const favoriteCatData = await favoriteCatResponse.json();
+      if (favoriteCatResponse.ok) {
         enqueueSnackbar(`${NOTIFICATION_MESSAGES.FAVOURITES_SUCCESS} ${messageText}`, { variant: 'success' });
         fetchCats();
       } else {
-        enqueueSnackbar(`${NOTIFICATION_MESSAGES.FAVOURITES_FAILED} ${messageText}: ${catVoteFavoriteJson.message}`, { variant: 'error' });
+        enqueueSnackbar(`${NOTIFICATION_MESSAGES.FAVOURITES_FAILED} ${messageText}: ${favoriteCatData.message}`, { variant: 'error' });
       }
-    } catch (err) {
-      enqueueSnackbar(`${NOTIFICATION_MESSAGES.FAVOURITES_FAILED} ${messageText}: ${err}`, { variant: 'error' });
+    } catch (error) {
+      enqueueSnackbar(`${NOTIFICATION_MESSAGES.FAVOURITES_FAILED} ${messageText}: ${error}`, { variant: 'error' });
     }
 
   }, [cats, enqueueSnackbar, fetchCats]);
@@ -93,22 +93,22 @@ const useCatContextValue = (): ICatContextData => {
       value: count
     };
     try {
-      const setCatVoteReq = createRequestOptions(
-        HTTP_METHODS.POST,
+      const setVoteRequestOptions = createRequestOptions(
         `${API_ENDPOINT_CONSTANTS.DOMAIN}${API_ENDPOINT_CONSTANTS.CAT_VOTES}`,
+        HTTP_METHODS.POST,
         { "content-type": 'application/json' },
         JSON.stringify(votePayload)
       );
-      const catVoteResult = await fetch(...setCatVoteReq);
-      const catVoteRespJson: any = await catVoteResult.json();
-      if (catVoteResult.ok) {
+      const votesResponse = await fetch(...setVoteRequestOptions);
+      const votesData = await votesResponse.json();
+      if (votesResponse.ok) {
         enqueueSnackbar(NOTIFICATION_MESSAGES.VOTE_SUCCESS, { variant: 'success' });
         fetchCats();
       } else {
-        enqueueSnackbar(`${NOTIFICATION_MESSAGES.VOTE_FAILED}: ${catVoteRespJson.message}`, { variant: 'error' });
+        enqueueSnackbar(`${NOTIFICATION_MESSAGES.VOTE_FAILED}: ${votesData.message}`, { variant: 'error' });
       }
-    } catch (err) {
-      enqueueSnackbar(`${NOTIFICATION_MESSAGES.VOTE_FAILED}: ${err}`, { variant: 'error' });
+    } catch (error) {
+      enqueueSnackbar(`${NOTIFICATION_MESSAGES.VOTE_FAILED}: ${error}`, { variant: 'error' });
     }
 
   }, [cats, enqueueSnackbar, fetchCats]);
