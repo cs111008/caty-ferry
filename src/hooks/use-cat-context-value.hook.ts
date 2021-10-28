@@ -1,5 +1,5 @@
+import { useSnackbar } from "notistack";
 import { useState, useCallback, useMemo } from "react";
-import { useSnackbar } from 'notistack';
 import API_ENDPOINT_CONSTANTS from "../constants/api-endpoint.constants";
 import { NOTIFICATION_MESSAGES } from "../constants/app.constants";
 import { HTTP_METHODS } from "../enums/http-methods.enum";
@@ -32,18 +32,19 @@ const useCatContextValue = (): ICatContextData => {
       } else {
         enqueueSnackbar(`${NOTIFICATION_MESSAGES.CAT_FETCH_FAILED}: ${catListData.message}`, { variant: 'error' });
       }
-      setIsLoading(false);
+     
     } catch (e: any) {
       enqueueSnackbar(`${NOTIFICATION_MESSAGES.CAT_FETCH_FAILED}: ${e.message}`, { variant: 'error' });
     }
+    setIsLoading(false);
 
   }, [enqueueSnackbar, setCats]);
 
   const favoriteCat = useCallback(async (selectedCat: ICatInterface) => {
     const selectedCatIndex = cats.findIndex(cat => cat.id === selectedCat.id);
-    const catsCopy = [...cats];
-    catsCopy[selectedCatIndex].disableFavorite = true;
-    setCats(catsCopy);
+    const newCats = [...cats];
+    newCats[selectedCatIndex].disableFavorite = true;
+    setCats(newCats);
 
     const favoritePayload = {
       image_id: selectedCat.id
@@ -84,9 +85,9 @@ const useCatContextValue = (): ICatContextData => {
   const voteCat = useCallback(async (selectedCat: ICatInterface, count: number) => {
 
     const selectedCatIndex = cats.findIndex(cat => cat.id === selectedCat.id);
-    const catsCopy = [...cats];
-    catsCopy[selectedCatIndex].disableVoting = true;
-    setCats(catsCopy);
+    const newCats = [...cats];
+    newCats[selectedCatIndex].disableVoting = true;
+    setCats(newCats);
 
     const votePayload = {
       image_id: selectedCat.id,
@@ -118,13 +119,15 @@ const useCatContextValue = (): ICatContextData => {
     isLoading,
     fetchCats,
     favoriteCat,
-    voteCat
+    voteCat,
+    setIsLoading
   }), [
     cats,
     isLoading,
     fetchCats,
     favoriteCat,
-    voteCat
+    voteCat,
+    setIsLoading
   ]);
 }
 

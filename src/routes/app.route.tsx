@@ -5,7 +5,6 @@ import { CatContext } from '../contexts/cat.context';
 import useCatContextValue from '../hooks/use-cat-context-value.hook'
 
 const AppRoute = () => {
-
     const catContextValue = useCatContextValue();
 
     return (
